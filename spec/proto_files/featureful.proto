@@ -53,4 +53,5 @@ message ABitOfEverything {
   optional bool bool_field = 13 [default = false];
   optional string string_field = 14 [default = "zomgkittenz"];
   optional bytes bytes_field = 15;
+  optional ABitOfEverything a_bit_of_everything_field = 16;
 };
