@@ -239,11 +239,14 @@ module ProtocolBuffers
           self.instance_variable_set("@#{field.name}", RepeatedField.new(field))
           @set_fields[tag] = true # repeated fields are always "set"
         else
-          value = field.default_value
-          self.__send__("#{field.name}=", value)
-          @set_fields[tag] = false
-          if field.class == Field::MessageField
-            value.notify_on_change(self, tag)
+          # If a nonrecursive MessageField, go ahead and create a default_value
+          unless field.class == Field::MessageField && self.class == field.proxy_class
+            value = field.default_value
+            self.__send__("#{field.name}=", value)
+            @set_fields[tag] = false
+            if field.class == Field::MessageField
+              value.notify_on_change(self, tag)
+            end
           end
         end
       end
